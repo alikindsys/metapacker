@@ -2,9 +2,21 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, PartialOrd, PartialEq, Debug)]
 pub enum Source {
-    Modrinth(ModrinthSource),
-    Github(GithubSource),
-    Https // Raw Https source. Requires TLS to work.
+    Modrinth {
+        kind: ModrinthSource,
+        project_id: String,
+        project_slug: String,
+        project_version: String
+    },
+    Github {
+        kind: GithubSource,
+        author: String,
+        repo: String
+    },
+    Https {
+        file: String,
+        uri: String
+    }// Raw Https source. Requires TLS to work.
 }
 
 #[derive(Deserialize, Serialize, PartialOrd, PartialEq, Debug)]
@@ -15,6 +27,6 @@ pub enum ModrinthSource {
 
 #[derive(Deserialize, Serialize, PartialOrd, PartialEq, Debug)]
 pub enum GithubSource {
-    Raw, // raw.github.com, used for getting config files and other things.
-    Release // A github release
+    Raw { path: String, revision: String }, // raw.github.com, used for getting config files and other things.
+    Release { tag: String, file: String } // A github release
 }
